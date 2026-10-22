@@ -3,7 +3,8 @@
 
 #include <raylib.h>
 
-void draw_net(int width, int height, int nets);
-void handle_paddle_movement(Vector2 *paddle_left, Vector2 *paddle_right);
+void draw_net(int nets);
+void handle_paddle_movement(Rectangle *paddle_left, Rectangle *paddle_right);
+void draw_score(int left_score, int right_score);
 
 #endif /** CPONG_H **/

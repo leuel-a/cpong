@@ -6,6 +6,9 @@ BreakBeforeBraces: Linux
 ColumnLimit: 80
 AlignConsecutiveAssignments: true
 AlignConsecutiveDeclarations: true
+AlignConsecutiveMacros:
+  Enabled: true
+  AcrossEmptyLines: true
 
 # BinPackArguments: false
 # AllowAllArgumentsOnNextLine: false
