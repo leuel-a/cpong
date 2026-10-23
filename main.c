@@ -60,6 +60,13 @@ int main(void)
 		float ball_ny = ball.y + (dt * ball_dy);
 
 		if (ball_nx < 0 || ball_nx + BALL_SIZE >= SCREEN_WIDTH) {
+			if (ball_nx < 0) {
+				right_score += 1;
+			} else if (ball_nx + BALL_SIZE >= SCREEN_WIDTH) {
+				left_score += 1;
+			}
+			ball.x = (float)SCREEN_WIDTH / 2;
+			ball.y = (float)SCREEN_HEIGHT / 2;
 			ball_dx *= -1;
 		} else {
 			ball.x = ball_nx;
@@ -114,10 +121,20 @@ int main(void)
 	return (0);
 }
 
+/**
+ * draw_score - draws the scores of both the left and right
+ *
+ * @left_score: the left score value
+ * @right_score: the right score value
+ *
+ * Return: Nothing.
+ */
 void draw_score(int left_score, int right_score)
 {
-	Font  font     = GetFontDefault();
-	float fontSize = 70.0;
+	Font    font        = GetFontDefault();
+	float   fontSize    = 70.0;
+	float   fontSpacing = 5.0;
+	Vector2 scoreOffset = {.x = 50, .y = 30};
 
 	const char *left_score_str  = TextFormat("%d", left_score);
 	const char *right_score_str = TextFormat("%d", right_score);
@@ -125,28 +142,30 @@ void draw_score(int left_score, int right_score)
 	int text_size = MeasureText(left_score_str, fontSize);
 
 	Vector2 left_score_pos = {
-		.x = (float)SCREEN_WIDTH / 2 - 100,
-		.y = 100,
+		.x = (float)SCREEN_WIDTH / 2 - (scoreOffset.x + text_size),
+		.y = scoreOffset.y,
 	};
 
 	Vector2 right_score_pos = {
-		.x = (float)SCREEN_WIDTH / 2 + 100,
-		.y = 100,
+		.x = (float)SCREEN_WIDTH / 2 + scoreOffset.x,
+		.y = scoreOffset.y,
 	};
 
-	DrawTextEx(font, left_score_str, left_score_pos, fontSize, 0, RAYWHITE);
-	DrawTextEx(font, right_score_str, right_score_pos, fontSize, 0, RAYWHITE);
+	DrawTextEx(font, left_score_str, left_score_pos, fontSize, fontSpacing, RAYWHITE);
+	DrawTextEx(font, right_score_str, right_score_pos, fontSize, fontSpacing, RAYWHITE);
 }
 
 /**
  * handle_paddle_movement - handles paddle movement
  *
+ * @paddle_left: the left paddle rectangle coordinate
+ * @paddle_right: the right paddle rectangle coordinate
+ *
  * Return: Nothing.
  */
 void handle_paddle_movement(Rectangle *paddle_left, Rectangle *paddle_right)
 {
-	if (IsKeyDown(KEY_S) &&
-	    paddle_left->y + PADDLE_SPEED + PADDLE_SIZE.y <= SCREEN_HEIGHT) {
+	if (IsKeyDown(KEY_S) && paddle_left->y + PADDLE_SPEED + PADDLE_SIZE.y <= SCREEN_HEIGHT) {
 		paddle_left->y += PADDLE_SPEED;
 	}
 
@@ -158,8 +177,7 @@ void handle_paddle_movement(Rectangle *paddle_left, Rectangle *paddle_right)
 		paddle_right->y -= PADDLE_SPEED;
 	}
 
-	if (IsKeyDown(KEY_DOWN) &&
-	    paddle_right->y + PADDLE_SPEED + PADDLE_SIZE.y <= SCREEN_HEIGHT) {
+	if (IsKeyDown(KEY_DOWN) && paddle_right->y + PADDLE_SPEED + PADDLE_SIZE.y <= SCREEN_HEIGHT) {
 		paddle_right->y += PADDLE_SPEED;
 	}
 }
