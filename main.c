@@ -51,7 +51,12 @@ int main(void)
 	};
 
 	InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "ping pong - raylib");
+
+	InitAudioDevice();
+
 	SetTargetFPS(60);
+
+	Sound scoreSound = LoadSound("./sounds/ping_sound.wav");
 
 	while (!WindowShouldClose()) {
 		float dt = GetFrameTime();
@@ -65,9 +70,12 @@ int main(void)
 			} else if (ball_nx + BALL_SIZE >= SCREEN_WIDTH) {
 				left_score += 1;
 			}
+
 			ball.x = (float)SCREEN_WIDTH / 2;
 			ball.y = (float)SCREEN_HEIGHT / 2;
 			ball_dx *= -1;
+
+			PlaySound(scoreSound);
 		} else {
 			ball.x = ball_nx;
 		}
@@ -115,6 +123,8 @@ int main(void)
 
 		EndDrawing();
 	}
+
+	CloseAudioDevice();
 
 	CloseWindow();
 
